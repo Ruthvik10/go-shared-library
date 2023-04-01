@@ -7,11 +7,10 @@ import (
 	"net/http"
 )
 
-func WriteJSON(w http.ResponseWriter, data any, status int, headers http.Header) {
+func WriteJSON(w http.ResponseWriter, data any, status int, headers http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return err
 	}
 	out = append(out, '\n')
 	for k, v := range headers {
@@ -20,6 +19,7 @@ func WriteJSON(w http.ResponseWriter, data any, status int, headers http.Header)
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(out)
+	return nil
 }
 
 func ReadJSON(w http.ResponseWriter, r *http.Request, dest any) error {
