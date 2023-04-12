@@ -33,3 +33,8 @@ func (z *zapLogger) Error(err error, properties map[string]any) {
 func (z *zapLogger) Fatal(err error, properties map[string]any) {
 	z.logger.Fatal(err.Error(), zap.Any("properties", properties))
 }
+
+func (z *zapLogger) Write(msg []byte) (int, error) {
+	z.logger.Error(string(msg))
+	return 0, nil
+}
